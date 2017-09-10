@@ -14,7 +14,7 @@ $ cd ~/.FreeCAD/Mod
 $ git clone https://github.com/skaiser/D3D-Printer-Workbench.git
 ````
 
-Create a soft link in yoru home directory to make it easier to add things like icons from the file browser windows.
+Create a soft link in your home directory to make it easier to add things like icons from the file browser windows.
 
 ````
 $ cd
