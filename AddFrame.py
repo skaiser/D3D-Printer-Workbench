@@ -20,8 +20,8 @@
 #########################################################################################
 #!/usr/bin/python
 
-import FreeCAD
-import FreeCADGui
+import FreeCAD, Part
+from FreeCAD import Gui
 
 # Locate Workbench Directory
 import os, FindIconPath
@@ -39,6 +39,19 @@ class AddFrameClass():
 
     def Activated(self):
         "Do something here"
+        # See here for opening dialog to choose part to import 
+        # https://github.com/hamish2014/FreeCAD_assembly2/blob/master/importPart.py#L125
+        FreeCAD.Console.PrintMessage("D3D Printer workbench is working!")
+        if Gui.ActiveDocument == None:
+            FreeCAD.newDocument()
+#        view = Gui.activeDocument().activeView()
+        doc=FreeCAD.activeDocument()
+        n=list()
+        c = Part.Circle() 
+        c.Radius=2.0
+        f = doc.addObject("Part::Feature", "Circle") # create a document with a circle feature
+        f.Shape = c.toShape() # Assign the circle shape to the shape property
+        doc.recompute()
         return
 
     def IsActive(self):
@@ -46,4 +59,4 @@ class AddFrameClass():
         are met or not. This function is optional."""
         return True
 
-FreeCADGui.addCommand('AddFrame', AddFrameClass()) 
+Gui.addCommand('AddFrame', AddFrameClass()) 
