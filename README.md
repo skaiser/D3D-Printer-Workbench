@@ -21,3 +21,6 @@ $ cd
 $ ln -s ~/.FreeCAD/Mod/ .
 ````
 
+## License
+
+GNU Lesser General Public License (LGPL) version 3. See the file [COPYING.Lesser](COPYING.Lesser).
