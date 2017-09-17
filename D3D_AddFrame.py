@@ -23,9 +23,11 @@
 #*                                                                         *
 #***************************************************************************
 
-
-import FreeCAD, Part, D3DInit
-from FreeCAD import Gui
+#import ImportGui
+import FreeCAD as App
+import FreeCADGui as Gui
+import D3DInit
+from PySide import QtGui #, QtCore # https://www.freecadweb.org/wiki/PySide
 
 class D3D_AddFrameClass():
     """Command to add the printer frame"""
@@ -37,19 +39,32 @@ class D3D_AddFrameClass():
                 'ToolTip' : "Adds a D3D printer frame"}
 
     def Activated(self):
-        "Do something here"
+        "Command was selected"
         # See here for opening dialog to choose part to import 
         # https://github.com/hamish2014/FreeCAD_assembly2/blob/master/importPart.py#L125
-        FreeCAD.Console.PrintMessage("D3D Printer workbench is working!")
-        if Gui.ActiveDocument == None:
-            FreeCAD.newDocument()
+        App.Console.PrintMessage("D3D Printer workbench is working!")
+        if not(App.ActiveDocument):
+            App.newDocument()
 #        view = Gui.activeDocument().activeView()
-        doc=FreeCAD.activeDocument()
-        n=list()
-        c = Part.Circle() 
-        c.Radius=2.0
-        f = doc.addObject("Part::Feature", "Circle") # create a document with a circle feature
-        f.Shape = c.toShape() # Assign the circle shape to the shape property
+        doc = App.activeDocument()
+        reply = QtGui.QInputDialog.getText(None, "Printer size", "How large is the printer (in inches)")
+        if reply[1]:
+            # user clicked OK
+            printer_size = int(reply[0])
+            App.Console.PrintMessage("Printer size will be " + str(printer_size) + " inches.")
+        else:
+            # user clicked Cancel
+            App.Console.PrintMessage("Printer size will be 16 inches.")
+    
+        # TODO(kaisers): Don't open in a new document!
+        App.openDocument(D3DInit.__dir__ + '/Resources/cad/D3D_X_Axis_Simple.fcstd')
+        #obj = doc.addObject("Part::FeaturePython", "X_Axis")
+        # TODO(kaisers): Might need to use STEP files?
+        #http://sliptonic.com/simple-assemblies-in-freecad/
+        #obj.addProperty("App::PropertyFile", "sourceFile", "importPart").sourceFile = D3DInit.__dir__ + '/Resources/cad/D3D_X_Axis_Simple.fcstd'
+        # TODO(kaisers): If first part
+        #obj.addProperty("App::PropertyBool","fixedPosition","importPart")
+        Gui.ActiveDocument.ActiveView.fitAll()
         doc.recompute()
         return
 
