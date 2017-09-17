@@ -24,19 +24,14 @@
 #***************************************************************************
 
 
-import FreeCAD, Part
+import FreeCAD, Part, D3DBase
 from FreeCAD import Gui
 
-# Locate Workbench Directory
-import os, FindIconPath
-path_D3D = os.path.dirname(FindIconPath.__file__)
-path_D3D_icons =  os.path.join(path_D3D, 'icons')
-
-class AddFrameClass():
+class D3D_AddFrameClass():
     """Command to add the printer frame"""
 
     def GetResources(self):
-        return {'Pixmap'  : path_D3D_icons + '/DrawStyleWireFrame.svg', # the name of a svg file available in the resources
+        return {'Pixmap'  : D3DBase.ICON_PATH + '/DrawStyleWireFrame.svg', # the name of a svg file available in the resources
                 'Accel' : "Shift+S", # a default shortcut (optional)
                 'MenuText': "Add a frame",
                 'ToolTip' : "Adds a D3D printer frame"}
@@ -63,4 +58,4 @@ class AddFrameClass():
         are met or not. This function is optional."""
         return True
 
-Gui.addCommand('AddFrame', AddFrameClass()) 
+Gui.addCommand('D3D_AddFrame', D3D_AddFrameClass()) 

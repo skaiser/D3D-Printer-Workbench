@@ -24,16 +24,16 @@
 #***************************************************************************
 
 
-class D3DWorkbench (Workbench):
+class D3D_Workbench (Workbench):
 
-    MenuText = "D3D Printer Workbench"
+    MenuText = "D3D Printer"
     ToolTip = "A workbench for designing D3D 3D printers by Open Source Ecology"
     #Icon = """paste here the contents of a 16x16 xpm icon"""
 
     def Initialize(self):
         "This function is executed when FreeCAD starts"
-        import AddFrame # import here all the needed files that create your FreeCAD commands
-        self.list = ["AddFrame"] # A list of command names created in the line above
+        import D3D_AddFrame # import here all the needed files that create your FreeCAD commands
+        self.list = ["D3D_AddFrame"] # A list of command names created in the line above
         self.appendToolbar("D3D", self.list) # creates a new toolbar with your commands
         #FreeCADGui.addIconPath( ':/d3d/icons' )
         #FreeCADGui.addPreferencePage( ':/d3d/ui/assembly2_prefs.ui','Assembly2' )
@@ -57,4 +57,4 @@ class D3DWorkbench (Workbench):
         # this function is mandatory if this is a full python workbench
         return "Gui::PythonWorkbench"
        
-Gui.addWorkbench(D3DWorkbench())
+Gui.addWorkbench(D3D_Workbench())
