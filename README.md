@@ -47,16 +47,8 @@ However, the thing **I've found most helpful is using the interactive python con
 
 [Part Scripting](https://www.freecadweb.org/wiki/Topological_data_scripting)
 
-As it turns out, it's sometimes easier to find good API docs by adding an "_API" to the module name than using the API index.
+The [Category:API](https://www.freecadweb.org/wiki/Category:API) page has a more browseable list of API docs for a small set of modules than the main API index pages:
 
-[FreeCAD](https://www.freecadweb.org/wiki/FreeCAD_API)
-
-[FreeCADGui](https://www.freecadweb.org/wiki/FreeCADGui_API)
-
-[Part API](https://www.freecadweb.org/wiki/Part_API)
-
-[Draft API](https://www.freecadweb.org/wiki/Draft_API)
-
-[Placement](https://www.freecadweb.org/wiki/Placement)
+FreeCAD and FreeCADGui are the main ones to took at, starting out.
 
 
