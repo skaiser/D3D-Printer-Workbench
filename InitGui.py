@@ -42,7 +42,10 @@ class D3D_Workbench (Workbench):
         #self.appendMenu(["An existing Menu", "My submenu"], self.list) # appends a submenu to an existing menu
 
     def Activated(self):
-        "This function is executed when the workbench is activated"
+        if not(FreeCAD.ActiveDocument):
+            FreeCAD.newDocument()
+
+        FreeCAD.Console.PrintMessage('D3D workbench loaded\n')
         return
 
     def Deactivated(self):
