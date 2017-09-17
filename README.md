@@ -47,8 +47,6 @@ However, the thing **I've found most helpful is using the interactive python con
 
 [Part Scripting](https://www.freecadweb.org/wiki/Topological_data_scripting)
 
-The [Category:API](https://www.freecadweb.org/wiki/Category:API) page has a more browseable list of API docs for a small set of modules than the main API index pages:
-
-FreeCAD and FreeCADGui are the main ones to took at, starting out.
+The [Category:API](https://www.freecadweb.org/wiki/Category:API) page has a more browseable list of API docs for a small set of modules than the main API index pages. FreeCAD and FreeCADGui are the main ones to took at, starting out.
 
 
