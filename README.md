@@ -1,5 +1,12 @@
 # D3D-Printer-Workbench
 
+## License
+[![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+
+GNU Lesser General Public License (LGPL) version 3. See the file [COPYING.Lesser](COPYING.Lesser).
+
+## Instructions
+
 [Requirements slide deck](http://opensourceecology.org/wiki/D3D_Workbench_in_FreeCAD)
 
 [Initial project overview video](https://www.youtube.com/watch?v=HadgIABxLv4)
@@ -21,6 +28,3 @@ $ cd
 $ ln -s ~/.FreeCAD/Mod/ .
 ````
 
-## License
-
-GNU Lesser General Public License (LGPL) version 3. See the file [COPYING.Lesser](COPYING.Lesser).
