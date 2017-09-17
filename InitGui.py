@@ -23,12 +23,13 @@
 #*                                                                         *
 #***************************************************************************
 
-
 class D3D_Workbench (Workbench):
-
-    MenuText = "D3D Printer"
-    ToolTip = "A workbench for designing D3D 3D printers by Open Source Ecology"
-    #Icon = """paste here the contents of a 16x16 xpm icon"""
+    "D3D Workbench object"
+    def __init__(self):
+        import D3DBase
+        self.__class__.Icon = D3DBase.ICON_PATH + '/Arch_Space_Tree.svg'
+        self.__class__.MenuText = "D3D Printer"
+        self.__class__.ToolTip = "A workbench for designing D3D 3D printers by Open Source Ecology"
 
     def Initialize(self):
         "This function is executed when FreeCAD starts"
