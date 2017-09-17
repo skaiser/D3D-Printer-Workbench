@@ -38,7 +38,7 @@ class D3D_Workbench (Workbench):
         self.appendToolbar("D3D", self.list) # creates a new toolbar with your commands
         #FreeCADGui.addIconPath( ':/d3d/icons' )
         #FreeCADGui.addPreferencePage( ':/d3d/ui/assembly2_prefs.ui','Assembly2' )
-        self.appendMenu("Design Menu", self.list) # creates a new menu
+        #self.appendMenu("Design Menu", self.list) # creates a new top-level menu (i.e., adds to the app toolbar)
         #self.appendMenu(["An existing Menu", "My submenu"], self.list) # appends a submenu to an existing menu
 
     def Activated(self):
