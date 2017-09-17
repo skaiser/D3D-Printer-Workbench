@@ -26,8 +26,8 @@
 class D3D_Workbench (Workbench):
     "D3D Workbench object"
     def __init__(self):
-        import D3DBase
-        self.__class__.Icon = D3DBase.ICON_PATH + '/WorkbenchIcon.svg'
+        import D3DInit
+        self.__class__.Icon = D3DInit.ICON_PATH + '/WorkbenchIcon.svg'
         self.__class__.MenuText = "D3D Printer"
         self.__class__.ToolTip = "A workbench for designing D3D 3D printers by Open Source Ecology"
 

@@ -24,14 +24,14 @@
 #***************************************************************************
 
 
-import FreeCAD, Part, D3DBase
+import FreeCAD, Part, D3DInit
 from FreeCAD import Gui
 
 class D3D_AddFrameClass():
     """Command to add the printer frame"""
 
     def GetResources(self):
-        return {'Pixmap'  : D3DBase.ICON_PATH + '/DrawStyleWireFrame.svg', # the name of a svg file available in the resources
+        return {'Pixmap'  : D3DInit.ICON_PATH + '/DrawStyleWireFrame.svg', # the name of a svg file available in the resources
                 'Accel' : "Shift+S", # a default shortcut (optional)
                 'MenuText': "Add a frame",
                 'ToolTip' : "Adds a D3D printer frame"}
