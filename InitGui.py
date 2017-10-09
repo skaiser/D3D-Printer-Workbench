@@ -33,8 +33,8 @@ class D3D_Workbench (Workbench):
 
     def Initialize(self):
         "This function is executed when FreeCAD starts"
-        import D3D_AddFrame # import here all the needed files that create your FreeCAD commands
-        self.list = ["D3D_AddFrame"] # A list of command names created in the line above
+        import D3D_AddFrame, D3D_ImportPart # import here all the needed files that create your FreeCAD commands
+        self.list = ["D3D_AddFrame", "D3D_ImportPart"] # A list of command names created in the line above
         self.appendToolbar("D3D", self.list) # creates a new toolbar with your commands
         #FreeCADGui.addIconPath( ':/d3d/icons' )
         #FreeCADGui.addPreferencePage( ':/d3d/ui/assembly2_prefs.ui','Assembly2' )
