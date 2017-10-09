@@ -31,20 +31,22 @@ $ ln -s ~/.FreeCAD/Mod/ .
 ## Useful API doc links
 
 These are actually quite helpful:
+
 [Scripting Basics](https://www.freecadweb.org/wiki/index.php?title=FreeCAD_Scripting_Basics)
+
 [PySide (i.e., QtGui)](https://www.freecadweb.org/wiki/PySide)
+
 [Python Scripting Tutorial](https://www.freecadweb.org/wiki/Python_scripting_tutorial)
+
 Also...click Help->Automatic python modules documentation. This is probably what you really want after reading the basic scripting tutorials. 
 However, the thing **I've found most helpful is using the interactive python console** as introduced in [Scripting Basics](https://www.freecadweb.org/wiki/index.php?title=FreeCAD_Scripting_Basics)
+
 [Forum](https://forum.freecadweb.org/)
+
 [Part Module](https://www.freecadweb.org/wiki/Part_Module)
+
 [Part Scripting](https://www.freecadweb.org/wiki/Topological_data_scripting)
 
-As it turns out, it's sometimes easier to find good API docs by adding an "_API" to the module name than using the API index.
-[FreeCAD](https://www.freecadweb.org/wiki/FreeCAD_API)
-[FreeCADGui](https://www.freecadweb.org/wiki/FreeCADGui_API)
-[Part API](https://www.freecadweb.org/wiki/Part_API)
-[Draft API](https://www.freecadweb.org/wiki/Draft_API)
-[Placement](https://www.freecadweb.org/wiki/Placement)
+The [Category:API](https://www.freecadweb.org/wiki/Category:API) page has a more browseable list of API docs for a small set of modules than the main API index pages. FreeCAD and FreeCADGui are the main ones to took at, starting out.
 
 
