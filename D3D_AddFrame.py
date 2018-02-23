@@ -28,6 +28,8 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import D3DInit
 from PySide import QtGui#, QtCore # https://www.freecadweb.org/wiki/PySide
+import pipeGui, outerCornerGui
+import frameGui
 
 class D3D_AddFrameClass():
     """Command to add the printer frame"""
@@ -48,42 +50,10 @@ class D3D_AddFrameClass():
             App.newDocument()
 #        view = Gui.activeDocument().activeView()
         doc = App.activeDocument()
-        printer_size = 12
-        reply = QtGui.QInputDialog.getText(None, "Printer size", "How large is the printer (in inches)")
-        if reply[1]:
-            # user clicked OK
-            printer_size = int(reply[0])
-            App.Console.PrintMessage("Printer size will be " + str(printer_size) + " inches.")
-        else:
-            # user clicked Cancel
-            App.Console.PrintMessage("Printer size will be 12 inches.")
-        #FreeCAD.getDocument("D3D_Left_Z_Axis_Simple").getObject("Cylinder").Height = '406.4 mm'
-        #FreeCAD.getDocument("D3D_Left_Z_Axis_Simple").getObject("Cylinder").Radius = '5.96875 mm'
-        # Angle doesn't appear to do much with the rod itself
-        # Axes may already be in the "correct" orientation!
-        #App.activeDocument().addObject('Sketcher::SketchObject','Sketch')
-        #App.activeDocument().Sketch.Placement = App.Placement(App.Vector(0.000000,0.000000,0.000000),App.Rotation(0.000000,0.000000,0.000000,1.000000))
-        #Gui.activeDocument().activeView().setCamera('#Inventor V2.1 ascii \n OrthographicCamera {\n viewportMapping ADJUST_CAMERA \n position 0 0 87 \n orientation 0 0 1  0 \n nearDistance -112.88701 \n farDistance 287.28702 \n aspectRatio 1 \n focalDistance 87 \n height 143.52005 }')
-        #Gui.activeDocument().setEdit('Sketch')
-        ##sk.getDatum('Constraint23')
-        #App.ActiveDocument.Sketch.addConstraint(Sketcher.Constraint('DistanceX',2,-506.400000))
-        #App.ActiveDocument.Sketch.addConstraint(Sketcher.Constraint('Distance',5,2,2,50.800000)) 
-        ########App.ActiveDocument.Sketch.setDatum(22,App.Units.Quantity('50.800000 mm'))
-        
-        #f.Geometry = [Part.Line(App.Vector(0,0,0),App.Vector(2,20,0)),Part.Line(App.Vector(0,0,0),App.Vector(20,2,0))]
-        #f.Constraints = [Sketcher.Constraint('Vertical',0),Sketcher.Constraint('Horizontal',1)]
-        #/usr/lib/freecad/Mod/Sketcher/SketcherExample.py
-        #[d.FileName for d in App.listDocuments().values()][0]
-        # TODO(kaisers): Don't open in a new document!
-        #
-        App.openDocument(D3DInit.__dir__ + '/Resources/cad/D3D_CAD_Assembly.fcstd')
-        #ImportGui.insert(D3DInit.__dir__ + '/Resources/cad/D3D_X_Axis_Simple.step')
-        #obj = doc.addObject("Part::FeaturePython", "X_Axis")
-        # TODO(kaisers): Might need to use STEP files?
-        #http://sliptonic.com/simple-assemblies-in-freecad/
-        #obj.addProperty("App::PropertyFile", "sourceFile", "importPart").sourceFile = D3DInit.__dir__ + '/Resources/cad/D3D_X_Axis_Simple.fcstd'
-        # TODO(kaisers): If first part
-        #obj.addProperty("App::PropertyBool","fixedPosition","importPart")
+	pipeTable = pipeGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
+	cornerTable = outerCornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
+	form = frameGui.MainDialog(doc, pipeTable, cornerTable)
+	form.exec_()
         Gui.ActiveDocument.ActiveView.fitAll()
         doc.recompute()
         return

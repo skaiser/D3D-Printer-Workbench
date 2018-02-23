@@ -167,7 +167,7 @@ class BoxFromTable:
 		self.LZ = tu("8 in")
 
 	def getCorner(self, partName):
-		corner = OuterCorner(self.document)
+		corner = outerCorner.OuterCorner(self.document)
 		row = self.corner_table.findPart(partName)
 		if row is None:
 			print('Corner part "%s" not found'%partName)
