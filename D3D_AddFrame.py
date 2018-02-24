@@ -36,19 +36,15 @@ class D3D_AddFrameClass():
 
     def GetResources(self):
         #App.ConfigGet('UserAppData') + '/Mod'
-        return {'Pixmap'  : D3DInit.ICON_PATH + '/DrawStyleWireFrame.svg', # the name of a svg file available in the resources
+        return {'Pixmap'  : D3DInit.ICON_PATH + '/AddFrame.svg', # the name of a svg file available in the resources
                 'Accel' : "Shift+S", # a default shortcut (optional)
                 'MenuText': "Add a frame",
                 'ToolTip' : "Adds a D3D printer frame"}
 
     def Activated(self):
-        "Command was selected"
-        # See here for opening dialog to choose part to import 
-        # https://github.com/hamish2014/FreeCAD_assembly2/blob/master/importPart.py#L125
-        App.Console.PrintMessage("D3D Printer workbench is working!")
         if not(App.ActiveDocument):
             App.newDocument()
-#        view = Gui.activeDocument().activeView()
+
         doc = App.activeDocument()
 	pipeTable = pipeGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
 	cornerTable = outerCornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
