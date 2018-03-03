@@ -34,7 +34,7 @@ from PySide import QtCore, QtGui
 import FreeCAD
 
 import D3DBase
-from frame import *
+from PvcFrame import *
 
 
 class MainDialog(QtGui.QDialog):
@@ -183,19 +183,19 @@ class MainDialog(QtGui.QDialog):
 		# Update active document.  If there is none, show a warning message and do nothing.
 		# Get dimensions from the table
 		box = BoxFromTable(self.document, self.pipeTable, self.cornerTable)
-		box.LX = tu(self.lineEditLX.text())
+		box.LX = parseQuantity(self.lineEditLX.text())
 		if box.LX == "":
 			msgBox = QtGui.QMessageBox()
 			msgBox.setText("Set LX length.")
 			msgBox.exec_()
 			return
-		box.LY = tu(self.lineEditLY.text())
+		box.LY = parseQuantity(self.lineEditLY.text())
 		if box.LY == "":
 			msgBox = QtGui.QMessageBox()
 			msgBox.setText("Set LY length.")
 			msgBox.exec_()
 			return
-		box.LZ = tu(self.lineEditLZ.text())
+		box.LZ = parseQuantity(self.lineEditLZ.text())
 		if box.LZ == "":
 			msgBox = QtGui.QMessageBox()
 			msgBox.setText("Set LZ length.")

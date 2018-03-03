@@ -29,17 +29,17 @@ import FreeCADGui as Gui
 import D3DInit
 from PySide import QtGui#, QtCore # https://www.freecadweb.org/wiki/PySide
 import pipeGui, outerCornerGui
-import frameGui
+import PvcFrameGui
 
-class D3D_AddFrameClass():
+class D3D_AddPvcFrameClass():
     """Command to add the printer frame"""
 
     def GetResources(self):
         #App.ConfigGet('UserAppData') + '/Mod'
         return {'Pixmap'  : D3DInit.ICON_PATH + '/AddFrame.svg', # the name of a svg file available in the resources
                 'Accel' : "Shift+S", # a default shortcut (optional)
-                'MenuText': "Add a frame",
-                'ToolTip' : "Adds a D3D printer frame"}
+                'MenuText': "Add a PVC frame",
+                'ToolTip' : "Adds a D3D printer frame built from PVC pipes and fittings"}
 
     def Activated(self):
         if not(App.ActiveDocument):
@@ -48,7 +48,7 @@ class D3D_AddFrameClass():
         doc = App.activeDocument()
 	pipeTable = pipeGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
 	cornerTable = outerCornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
-	form = frameGui.MainDialog(doc, pipeTable, cornerTable)
+	form = PvcFrameGui.MainDialog(doc, pipeTable, cornerTable)
 	form.exec_()
         Gui.ActiveDocument.ActiveView.fitAll()
         doc.recompute()
@@ -59,4 +59,4 @@ class D3D_AddFrameClass():
         are met or not. This function is optional."""
         return True
 
-Gui.addCommand('D3D_AddFrame', D3D_AddFrameClass()) 
+Gui.addCommand('D3D_AddPvcFrame', D3D_AddPvcFrameClass()) 
