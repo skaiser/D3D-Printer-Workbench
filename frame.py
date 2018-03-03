@@ -40,7 +40,7 @@ from piping import *
 import outerCorner
 import pipe as pipemod
 
-tu = FreeCAD.Units.parseQuantity
+parseQuantity = FreeCAD.Units.parseQuantity
 
 # This version of the macro does not create corners.
 DIMENSIONS_USED = ["G", "LX", "LY", "LZ", "POD", "PID"] 
@@ -69,16 +69,16 @@ class UnplausibleDimensions(Error):
 class Box:
 	def __init__(self, document):
 		self.document = document
-		self.G = tu("2 cm")
-		self.LX = tu("30 cm")
-		self.LY = tu("20 cm")
-		self.LZ = tu("25 in")
-		self.POD = tu("3 cm")
-		self.Thk = tu("0.5 cm")
+		self.G = parseQuantity("2 cm")
+		self.LX = parseQuantity("30 cm")
+		self.LY = parseQuantity("20 cm")
+		self.LZ = parseQuantity("25 in")
+		self.POD = parseQuantity("3 cm")
+		self.Thk = parseQuantity("0.5 cm")
 		self.corner = outerCorner.OuterCorner(document)
 		
 	def checkDimensions(self):
-		if not ( self.POD > tu("0 mm") and self.Thk > tu("0 mm") ):
+		if not ( self.POD > parseQuantity("0 mm") and self.Thk > parseQuantity("0 mm") ):
 			raise UnplausibleDimensions("Pipe dimensions must be positive. They are POD=%s and Thk=%s instead"%(self.POD, self.PID))
 		if not (self.LX > 2*self.G):
 			raise UnplausibleDimensions("The length LX %smust be larger than 2*G %s"%(self.LX, 2*self.G))
@@ -186,9 +186,9 @@ class BoxFromTable:
 		self.document = document
 		self.pipe_table = pipe_table
 		self.corner_table = corner_table
-		self.LX = tu("12 in")
-		self.LY = tu("10 in")
-		self.LZ = tu("8 in")
+		self.LX = parseQuantity("12 in")
+		self.LY = parseQuantity("10 in")
+		self.LZ = parseQuantity("8 in")
 
 	def getCorner(self, partName):
 		corner = outerCorner.OuterCorner(self.document)
@@ -196,11 +196,11 @@ class BoxFromTable:
 		if row is None:
 			print('Corner part "%s" not found'%partName)
 			return
-		corner.G = tu(row["G"])
-		corner.H = tu(row["H"])
-		corner.M = tu(row["M"])
-		corner.POD = tu(row["POD"])
-		corner.PID = tu(row["PID"])
+		corner.G = parseQuantity(row["G"])
+		corner.H = parseQuantity(row["H"])
+		corner.M = parseQuantity(row["M"])
+		corner.POD = parseQuantity(row["POD"])
+		corner.PID = parseQuantity(row["PID"])
 		return corner
 		
 	def create(self, pipeName, cornerName, convertToSolid = True):
@@ -217,8 +217,8 @@ class BoxFromTable:
 		if row is None:
 			print('Pipe part "%s" not found'%pipeName)
 			return
-		frame_box.PID = tu(row["ID"])
-		frame_box.POD = tu(row["OD"])
+		frame_box.PID = parseQuantity(row["ID"])
+		frame_box.POD = parseQuantity(row["OD"])
 		return frame_box.create(convertToSolid)
 
 # Test macros.
