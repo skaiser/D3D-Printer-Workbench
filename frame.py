@@ -56,7 +56,7 @@ class Error(Exception):
 
 class UnplausibleDimensions(Error):
 	"""Exception raised when dimensions are unplausible. For example if
-	outer diameter is larger than the iner one.
+	outer diameter is larger than the inner one.
 
 	Attributes:
 	message -- explanation of the error
@@ -88,7 +88,7 @@ class Box:
 			raise UnplausibleDimensions("The length LZ %smust be larger than 2*G %s"%(self.LZ, 2*self.G))
 	
 	def createPipes(self, group, convertToSolid):
-		# Calculate pipe lengthes
+		# Calculate pipe lengths.
 		x_pipe_l = self.LX - 2*self.G
 		y_pipe_l = self.LY - 2*self.G
 		z_pipe_l = self.LZ - 2*self.G
@@ -112,7 +112,7 @@ class Box:
 		ypipe.Placement = FreeCAD.Placement(FreeCAD.Vector(0, self.G,0), FreeCAD.Rotation(FreeCAD.Vector(1,0,0),-90), FreeCAD.Vector(0,0,0))
 		ypipe.Label = "y-"+ypipe.Label
 
-		# Add 3 clones for each x,y,z-type of axis. Place them on the edges of the quebe
+		# Add 3 clones for each x,y,z-type of axis. Place them on the edges of the cube.
 		# First add z-pipes (because it simple, and does not require rotation).
 		tmp = Draft.clone(zpipe, FreeCAD.Vector(self.LX,0,self.G))
 		group.addObject(tmp)
@@ -186,6 +186,8 @@ class BoxFromTable:
 		self.document = document
 		self.pipe_table = pipe_table
 		self.corner_table = corner_table
+		# Set some test values. Replace them by custom values
+		# before to call BoxFromTable.create().
 		self.LX = parseQuantity("12 in")
 		self.LY = parseQuantity("10 in")
 		self.LZ = parseQuantity("8 in")
