@@ -35,7 +35,8 @@ import FreeCAD
 
 import D3DBase
 from PvcFrame import *
-
+import pipeGui
+import outerCornerGui
 
 class MainDialog(QtGui.QDialog):
 	QSETTINGS_APPLICATION = "OSE D3D-Printer-Workbench"
@@ -47,22 +48,10 @@ class MainDialog(QtGui.QDialog):
 		self.cornerTable = cornerTable
 		self.initUi()
 
-	def fillPipeNames(self):
-		for row in self.pipeTable.data:
-			name = row[self.pipeTable.nameIndex]
-			self.comboBoxPipeName.addItem(name)
-
-	def fillCornerNames(self):
-		for row in self.cornerTable.data:
-			name = row[self.cornerTable.nameIndex]
-			self.comboBoxCornerName.addItem(name)
-
 	def initUi(self): 
 		Dialog = self # Added 
 		self.result = -1 
 		self.setupUi(self)
-		self.fillPipeNames()
-		self.fillCornerNames()
 		# Restore previous user input. Ignore exceptions to prevent this part
 		# part of the code to prevent GUI from starting, once settings are broken.
 		try:
@@ -127,17 +116,23 @@ class MainDialog(QtGui.QDialog):
 		self.lineEditLZ.setGeometry(QtCore.QRect(240, 30, 71, 27))
 		self.lineEditLZ.setObjectName("lineEditLZ")
 		self.label_2 = QtGui.QLabel(self.horizontalWidget)
-		self.label_2.setGeometry(QtCore.QRect(0, 70, 91, 17))
+		self.label_2.setGeometry(QtCore.QRect(0, 70, 91, 21))
 		self.label_2.setObjectName("label_2")
 		self.label_7 = QtGui.QLabel(self.horizontalWidget)
-		self.label_7.setGeometry(QtCore.QRect(0, 100, 91, 17))
+		self.label_7.setGeometry(QtCore.QRect(0, 100, 91, 21))
 		self.label_7.setObjectName("label_7")
-		self.comboBoxPipeName = QtGui.QComboBox(self.horizontalWidget)
-		self.comboBoxPipeName.setGeometry(QtCore.QRect(90, 70, 221, 27))
-		self.comboBoxPipeName.setObjectName("comboBoxPipeName")
-		self.comboBoxCornerName = QtGui.QComboBox(self.horizontalWidget)
-		self.comboBoxCornerName.setGeometry(QtCore.QRect(110, 100, 201, 27))
-		self.comboBoxCornerName.setObjectName("comboBoxCornerName")
+		self.buttonSelectPipe = QtGui.QPushButton(self.horizontalWidget)
+		self.buttonSelectPipe.setGeometry(QtCore.QRect(320, 70, 111, 27))
+		self.buttonSelectPipe.setObjectName("buttonSelectPipe")
+		self.buttonSelectCorner = QtGui.QPushButton(self.horizontalWidget)
+		self.buttonSelectCorner.setGeometry(QtCore.QRect(320, 100, 111, 27))
+		self.buttonSelectCorner.setObjectName("buttonSelectCorner")
+		self.lineEditPipeName = QtGui.QLineEdit(self.horizontalWidget)
+		self.lineEditPipeName.setGeometry(QtCore.QRect(80, 70, 231, 27))
+		self.lineEditPipeName.setObjectName("lineEditPipeName")
+		self.lineEditCornerName = QtGui.QLineEdit(self.horizontalWidget)
+		self.lineEditCornerName.setGeometry(QtCore.QRect(100, 100, 211, 27))
+		self.lineEditCornerName.setObjectName("lineEditCornerName")
 		self.verticalLayout.addWidget(self.horizontalWidget)
 		self.labelDraft = QtGui.QLabel(Dialog)
 		self.labelDraft.setText("")
@@ -154,6 +149,8 @@ class MainDialog(QtGui.QDialog):
 		self.retranslateUi(Dialog)
 		QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("accepted()"), Dialog.accept)
 		QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), Dialog.reject)
+		QtCore.QObject.connect(self.buttonSelectPipe, QtCore.SIGNAL("clicked()"), Dialog.selectPipeClicked)
+		QtCore.QObject.connect(self.buttonSelectCorner, QtCore.SIGNAL("clicked()"), Dialog.selectCornerClicked)
 		QtCore.QMetaObject.connectSlotsByName(Dialog)
 
 	def retranslateUi(self, Dialog):
@@ -167,9 +164,12 @@ class MainDialog(QtGui.QDialog):
 		self.lineEditLZ.setText(QtGui.QApplication.translate("Dialog", "40 cm", None, QtGui.QApplication.UnicodeUTF8))
 		self.label_2.setText(QtGui.QApplication.translate("Dialog", "Pipe name:", None, QtGui.QApplication.UnicodeUTF8))
 		self.label_7.setText(QtGui.QApplication.translate("Dialog", "Corner name:", None, QtGui.QApplication.UnicodeUTF8))
+		self.buttonSelectPipe.setText(QtGui.QApplication.translate("Dialog", "Select Pipe", None, QtGui.QApplication.UnicodeUTF8))
+		self.buttonSelectCorner.setText(QtGui.QApplication.translate("Dialog", "Select Corner", None, QtGui.QApplication.UnicodeUTF8))
+
 
 	def accept(self):
-		"""User clicked OK"""
+		"""User clicked OK."""
 		# If there is no active document, show a warning message and exit dialog.
 		if self.document is None:
 			text = "I have not found any active document were I can create a corner fitting.\n"\
@@ -202,13 +202,13 @@ class MainDialog(QtGui.QDialog):
 			msgBox.exec_()
 			return
 	
-		pipeName = self.comboBoxPipeName.currentText()
+		pipeName = self.lineEditPipeName.text()
 		if pipeName == "":
 			msgBox = QtGui.QMessageBox()
 			msgBox.setText("Enter pipe name.")
 			msgBox.exec_()
 			return
-		cornerName = self.comboBoxCornerName.currentText()
+		cornerName = self.lineEditCornerName.text()
 		if cornerName == "":
 			msgBox = QtGui.QMessageBox()
 			msgBox.setText("Enter corner name.")
@@ -231,21 +231,9 @@ class MainDialog(QtGui.QDialog):
 		settings.setValue("lineEditLX", self.lineEditLX.text())
 		settings.setValue("lineEditLY", self.lineEditLY.text())
 		settings.setValue("lineEditLZ", self.lineEditLZ.text())
-		settings.setValue("comboBoxPipeName", self.comboBoxPipeName.currentText())
-		settings.setValue("comboBoxCornerName", self.comboBoxCornerName.currentText())
+		settings.setValue("lineEditPipeName", self.lineEditPipeName.text())
+		settings.setValue("lineEditCornerName", self.lineEditCornerName.text())
 		settings.sync()
-
-	@staticmethod
-	def selectOrAdd(combobox, text):
-		""" Select text in combobox if it exists. If not add it.
-		We usually whant to keep old text, in order not to lose its value when
-		the dialog is closed. Even if this text can be temporary not be invalid, because the corresponding
-		part table is incomplete.
-		"""
-		index = combobox.findText(text, QtCore.Qt.MatchFixedString)
-		if index < 0: # Item not found, add it.
-			index = combobox.addItem(text)
-		combobox.setCurrentIndex(index)
 
 	def restoreInput(self):
 		settings = QtCore.QSettings(MainDialog.QSETTINGS_APPLICATION, MainDialog.QSETTINGS_NAME)
@@ -260,12 +248,21 @@ class MainDialog(QtGui.QDialog):
 		text = settings.value("lineEditLZ")
 		if text is not None:
 			self.lineEditLZ.setText(text)
-		text = settings.value("comboBoxPipeName")
+		text = settings.value("lineEditPipeName")
 		if text is not None:
-			self.selectOrAdd(self.comboBoxPipeName, text)
-
-		text = settings.value("comboBoxCornerName")
+			self.lineEditPipeName.setText(text)
+		text = settings.value("lineEditCornerName")
 		if text is not None:
-			self.selectOrAdd(self.comboBoxCornerName, text)
+			self.lineEditCornerName.setText(text)
 
-
+	def selectPipeClicked(self):
+		dlg = pipeGui.MainDialog(self.document, self.pipeTable)
+		partName = dlg.showForSelection(self.lineEditPipeName.text())
+		if partName is not None:
+			self.lineEditPipeName.setText(partName)
+			
+	def selectCornerClicked(self):
+		dlg = outerCornerGui.MainDialog(self.document, self.cornerTable)
+		partName = dlg.showForSelection(self.lineEditCornerName.text())
+		if partName is not None:
+			self.lineEditCornerName.setText(partName)

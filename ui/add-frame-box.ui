@@ -161,7 +161,7 @@
         <x>0</x>
         <y>70</y>
         <width>91</width>
-        <height>17</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
@@ -174,29 +174,55 @@
         <x>0</x>
         <y>100</y>
         <width>91</width>
-        <height>17</height>
+        <height>21</height>
        </rect>
       </property>
       <property name="text">
        <string>Corner name:</string>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBoxPipeName">
+     <widget class="QPushButton" name="buttonSelectPipe">
       <property name="geometry">
        <rect>
-        <x>90</x>
+        <x>320</x>
         <y>70</y>
-        <width>221</width>
+        <width>111</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Select Pipe</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="buttonSelectCorner">
+      <property name="geometry">
+       <rect>
+        <x>320</x>
+        <y>100</y>
+        <width>111</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Select Corner</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditPipeName">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>70</y>
+        <width>231</width>
         <height>27</height>
        </rect>
       </property>
      </widget>
-     <widget class="QComboBox" name="comboBoxCornerName">
+     <widget class="QLineEdit" name="lineEditCornerName">
       <property name="geometry">
        <rect>
-        <x>110</x>
+        <x>100</x>
         <y>100</y>
-        <width>201</width>
+        <width>211</width>
         <height>27</height>
        </rect>
       </property>
@@ -237,8 +263,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>556</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -253,8 +279,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>556</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -262,5 +288,41 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>buttonSelectPipe</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>selectPipeClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>100</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>616</x>
+     <y>138</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonSelectCorner</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>selectCornerClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>373</x>
+     <y>120</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>623</x>
+     <y>127</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>selectPipeClicked()</slot>
+  <slot>selectCornerClicked()</slot>
+ </slots>
 </ui>
