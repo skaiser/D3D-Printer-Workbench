@@ -23,42 +23,40 @@
 #*                                                                         *
 #***************************************************************************
 
-class D3D_Workbench (Workbench):
-    "D3D Workbench object"
-    def __init__(self):
-        import D3DInit
-        self.__class__.Icon = D3DInit.ICON_PATH + '/WorkbenchIcon.svg'
-        self.__class__.MenuText = "D3D Printer"
-        self.__class__.ToolTip = "A workbench for designing D3D 3D printers by Open Source Ecology"
+import ImportGui
+import FreeCAD as App
+import FreeCADGui as Gui
+import D3DInit
+from PySide import QtGui#, QtCore # https://www.freecadweb.org/wiki/PySide
+import pipeGui, outerCornerGui
+import PvcFrameGui
 
-    def Initialize(self):
-        "This function is executed when FreeCAD starts"
-        import D3D_AddPvcFrame, D3D_ImportPart # import here all the needed files that create your FreeCAD commands
-        self.list = ["D3D_AddPvcFrame", "D3D_ImportPart"] # A list of command names created in the line above
-        self.appendToolbar("D3D", self.list) # creates a new toolbar with your commands
-        #FreeCADGui.addIconPath( ':/d3d/icons' )
-        #FreeCADGui.addPreferencePage( ':/d3d/ui/assembly2_prefs.ui','Assembly2' )
-        #self.appendMenu("Design Menu", self.list) # creates a new top-level menu (i.e., adds to the app toolbar)
-        #self.appendMenu(["An existing Menu", "My submenu"], self.list) # appends a submenu to an existing menu
+class D3D_AddPvcFrameClass():
+    """Command to add the printer frame"""
+
+    def GetResources(self):
+        #App.ConfigGet('UserAppData') + '/Mod'
+        return {'Pixmap'  : D3DInit.ICON_PATH + '/AddFrame.svg', # the name of a svg file available in the resources
+                'Accel' : "Shift+S", # a default shortcut (optional)
+                'MenuText': "Add a PVC frame",
+                'ToolTip' : "Adds a D3D printer frame built from PVC pipes and fittings"}
 
     def Activated(self):
-        if not(FreeCAD.ActiveDocument):
-            FreeCAD.newDocument()
+        if not(App.ActiveDocument):
+            App.newDocument()
 
-        FreeCAD.Console.PrintMessage('D3D workbench loaded\n')
+        doc = App.activeDocument()
+	pipeTable = pipeGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
+	cornerTable = outerCornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
+	form = PvcFrameGui.MainDialog(doc, pipeTable, cornerTable)
+	form.exec_()
+        Gui.ActiveDocument.ActiveView.fitAll()
+        doc.recompute()
         return
 
-    def Deactivated(self):
-        "This function is executed when the workbench is deactivated"
-        return
+    def IsActive(self):
+        """Here you can define if the command must be active or not (greyed) if certain conditions
+        are met or not. This function is optional."""
+        return True
 
-    def ContextMenu(self, recipient):
-        "This is executed whenever the user right-clicks on screen"
-        # "recipient" will be either "view" or "tree"
-        self.appendContextMenu("D3D commands", self.list) # add commands to the context menu
-
-    def GetClassName(self): 
-        # this function is mandatory if this is a full python workbench
-        return "Gui::PythonWorkbench"
-       
-Gui.addWorkbench(D3D_Workbench())
+Gui.addCommand('D3D_AddPvcFrame', D3D_AddPvcFrameClass()) 
