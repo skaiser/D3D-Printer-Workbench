@@ -28,7 +28,7 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import D3DInit
 from PySide import QtGui#, QtCore # https://www.freecadweb.org/wiki/PySide
-import pipeGui, outerCornerGui
+import pipeGui, cornerGui
 import PvcFrameGui
 
 class D3D_AddPvcFrameClass():
@@ -47,7 +47,7 @@ class D3D_AddPvcFrameClass():
 
         doc = App.activeDocument()
 	pipeTable = pipeGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
-	cornerTable = outerCornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
+	cornerTable = cornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
 	form = PvcFrameGui.MainDialog(doc, pipeTable, cornerTable)
 	form.exec_()
         Gui.ActiveDocument.ActiveView.fitAll()
