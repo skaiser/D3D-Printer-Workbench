@@ -37,7 +37,7 @@ import Draft
 
 import OSEBase
 from piping import *
-import outerCorner
+import corner as cornermod
 import pipe as pipemod
 
 parseQuantity = FreeCAD.Units.parseQuantity
@@ -75,7 +75,7 @@ class Box:
 		self.LZ = parseQuantity("25 in")
 		self.POD = parseQuantity("3 cm")
 		self.Thk = parseQuantity("0.5 cm")
-		self.corner = outerCorner.OuterCorner(document)
+		self.corner = cornermod.Corner(document)
 		
 	def checkDimensions(self):
 		if not ( self.POD > parseQuantity("0 mm") and self.Thk > parseQuantity("0 mm") ):
@@ -193,7 +193,7 @@ class BoxFromTable:
 		self.LZ = parseQuantity("8 in")
 
 	def getCorner(self, partName):
-		corner = outerCorner.OuterCorner(self.document)
+		corner = cornermod.Corner(self.document)
 		row = self.corner_table.findPart(partName)
 		if row is None:
 			print('Corner part "%s" not found'%partName)
@@ -235,7 +235,7 @@ def TestTable():
 	pipe_table = CsvTable(PIPE_DIMENSIONS_USED)
 	corner_table = CsvTable(CORNER_DIMENSIONS_USED)
 	pipe_table.load(pipemod.CSV_TABLE_PATH)
-	corner_table.load(outerCorner.CSV_TABLE_PATH)
+	corner_table.load(outer.CSV_TABLE_PATH)
 	box = BoxFromTable(document, pipe_table, corner_table)
 	pipeName = pipe_table.getPartName(0)
 	cornerName = corner_table.getPartName(0)

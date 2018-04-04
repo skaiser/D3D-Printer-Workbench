@@ -36,7 +36,7 @@ import FreeCAD
 import D3DBase
 from PvcFrame import *
 import pipeGui
-import outerCornerGui
+import cornerGui
 
 class MainDialog(QtGui.QDialog):
 	QSETTINGS_APPLICATION = "OSE D3D-Printer-Workbench"
@@ -262,7 +262,7 @@ class MainDialog(QtGui.QDialog):
 			self.lineEditPipeName.setText(partName)
 			
 	def selectCornerClicked(self):
-		dlg = outerCornerGui.MainDialog(self.document, self.cornerTable)
+		dlg = cornerGui.MainDialog(self.document, self.cornerTable)
 		partName = dlg.showForSelection(self.lineEditCornerName.text())
 		if partName is not None:
 			self.lineEditCornerName.setText(partName)
