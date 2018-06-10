@@ -11,7 +11,7 @@
 #*  modify it under the terms of the GNU Lesser General Public             *
 #*  License as published by the Free Software Foundation; either           *
 #*  version 2 of the License, or (at your option) any later version.       *
-#*                                                                         *            
+#*                                                                         *
 #*  This library is distributed in the hope that it will be useful,        *
 #*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
 #*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU      *
@@ -27,43 +27,14 @@
 # Date: 11 February 2018
 # Create a pipe frame box.
 
-import math
-import csv
-import os.path
-
 import FreeCAD
-import Part
 import Draft
 
-import OSEBase
-from piping import *
-import corner as cornermod
-import pipe as pipemod
+import OsePiping.Piping as Piping
+import OsePiping.Corner as CornerMod
+import OsePiping.Pipe as PipeMod
 
 parseQuantity = FreeCAD.Units.parseQuantity
-
-# This version of the macro does not create corners.
-DIMENSIONS_USED = ["G", "LX", "LY", "LZ", "POD", "PID"] 
-
-# It must contain unique values in the column "Name" and also, dimensions listened below.
-PIPE_DIMENSIONS_USED = ["ID", "OD"]
-CORNER_DIMENSIONS_USED = ["G", "H", "M", "POD", "PID"]
-
-class Error(Exception):
-	"""Base class for exceptions in this module."""
-	def __init__(self, message):
-		super(Error, self).__init__(message)
-
-class UnplausibleDimensions(Error):
-	"""Exception raised when dimensions are unplausible. For example if
-	outer diameter is larger than the inner one.
-
-	Attributes:
-	message -- explanation of the error
-	"""
-
-	def __init__(self, message):
-		super(UnplausibleDimensions, self).__init__(message)
 
 
 class Box:
@@ -75,25 +46,25 @@ class Box:
 		self.LZ = parseQuantity("25 in")
 		self.POD = parseQuantity("3 cm")
 		self.Thk = parseQuantity("0.5 cm")
-		self.corner = cornermod.Corner(document)
-		
+		self.corner = CornerMod.Corner(document)
+
 	def checkDimensions(self):
 		if not ( self.POD > parseQuantity("0 mm") and self.Thk > parseQuantity("0 mm") ):
-			raise UnplausibleDimensions("Pipe dimensions must be positive. They are POD=%s and Thk=%s instead"%(self.POD, self.PID))
+			raise Piping.UnplausibleDimensions("Pipe dimensions must be positive. They are POD=%s and Thk=%s instead"%(self.POD, self.PID))
 		if not (self.LX > 2*self.G):
-			raise UnplausibleDimensions("The length LX %smust be larger than 2*G %s"%(self.LX, 2*self.G))
+			raise Piping.UnplausibleDimensions("The length LX %smust be larger than 2*G %s"%(self.LX, 2*self.G))
 		if not (self.LY > 2*self.G):
-			raise UnplausibleDimensions("The length LY %smust be larger than 2*G %s"%(self.LY, 2*self.G))
+			raise Piping.UnplausibleDimensions("The length LY %smust be larger than 2*G %s"%(self.LY, 2*self.G))
 		if not (self.LZ > 2*self.G):
-			raise UnplausibleDimensions("The length LZ %smust be larger than 2*G %s"%(self.LZ, 2*self.G))
-	
+			raise Piping.UnplausibleDimensions("The length LZ %smust be larger than 2*G %s"%(self.LZ, 2*self.G))
+
 	def createPipes(self, group, convertToSolid):
 		# Calculate pipe lengths.
 		x_pipe_l = self.LX - 2*self.G
 		y_pipe_l = self.LY - 2*self.G
 		z_pipe_l = self.LZ - 2*self.G
 		# First 3 pipes around the (0,0,0) origin in X,Y,Z direction
-		pipe = pipemod.Pipe(self.document)
+		pipe = PipeMod.Pipe(self.document)
 		pipe.OD = self.POD
 		pipe.Thk = self.Thk
 		pipe.H = z_pipe_l
@@ -171,7 +142,7 @@ class Box:
 		tmp.Placement = FreeCAD.Placement(FreeCAD.Vector(0,0,0), FreeCAD.Rotation(FreeCAD.Vector(0,0,1),180), FreeCAD.Vector(0,0,0))
 		# Second rotation + shift.
 		tmp.Placement = FreeCAD.Placement(FreeCAD.Vector(self.LX,self.LY, self.LZ), FreeCAD.Rotation(FreeCAD.Vector(1,0,0),90), FreeCAD.Vector(0,0,0)).multiply(tmp.Placement)
-		
+
 	def create(self, convertToSolid):
 		self.checkDimensions()
 		group = self.document.addObject("App::DocumentObjectGroup", "frame box group")
@@ -193,7 +164,7 @@ class BoxFromTable:
 		self.LZ = parseQuantity("8 in")
 
 	def getCorner(self, partName):
-		corner = cornermod.Corner(self.document)
+		corner = CornerMod.Corner(self.document)
 		row = self.corner_table.findPart(partName)
 		if row is None:
 			print('Corner part "%s" not found'%partName)
@@ -202,9 +173,9 @@ class BoxFromTable:
 		corner.H = parseQuantity(row["H"])
 		corner.M = parseQuantity(row["M"])
 		corner.POD = parseQuantity(row["POD"])
-		corner.PID = parseQuantity(row["PID"])
+		corner.PThk = parseQuantity(row["PThk"])
 		return corner
-		
+
 	def create(self, pipeName, cornerName, convertToSolid = True):
 		frame_box = Box(self.document)
 		frame_box.LX = self.LX
@@ -220,7 +191,7 @@ class BoxFromTable:
 			print('Pipe part "%s" not found'%pipeName)
 			return
 		frame_box.PID = parseQuantity(row["ID"])
-		frame_box.POD = parseQuantity(row["OD"])
+		frame_box.PThk = parseQuantity(row["Thk"])
 		return frame_box.create(convertToSolid)
 
 # Test macros.
@@ -232,20 +203,19 @@ def TestBox():
 
 def TestTable():
 	document = FreeCAD.activeDocument()
-	pipe_table = CsvTable(PIPE_DIMENSIONS_USED)
-	corner_table = CsvTable(CORNER_DIMENSIONS_USED)
-	pipe_table.load(pipemod.CSV_TABLE_PATH)
-	corner_table.load(outer.CSV_TABLE_PATH)
+	pipe_table = Piping.CsvTable(PipeMod.DIMENSIONS_USED)
+	corner_table = Piping.CsvTable(CornerMod.DIMENSIONS_USED)
+	pipe_table.load(PipeMod.CSV_TABLE_PATH)
+	corner_table.load(CornerMod.CSV_TABLE_PATH)
 	box = BoxFromTable(document, pipe_table, corner_table)
-	pipeName = pipe_table.getPartName(0)
-	cornerName = corner_table.getPartName(0)
+	pipeName = pipe_table.getPartKey(0)
+	cornerName = corner_table.getPartKey(0)
 
 	print("Using pipe %s"%pipeName)
 	print("Using corner %s"%cornerName)
-	
+
 	box.create(pipeName, cornerName, False)
 	document.recompute()
 
 #TestBox()
 #TestTable()
-
