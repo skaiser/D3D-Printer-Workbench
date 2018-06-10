@@ -18,12 +18,16 @@ GNU Lesser General Public License (LGPL) version 3. See the file [COPYING.Lesser
 ````
 $ mkdir ~/.FreeCAD/Mod
 $ cd ~/.FreeCAD/Mod
-$ git clone https://github.com/skaiser/D3D-Printer-Workbench.git
 ````
-If you want to create PVC frames, you also need to install OSE-piping workbench.
 
+Install hard dependency for PVC frames.
 ````
 $ git clone https://github.com/rkrenzler/ose-piping-workbench.git
+````
+
+Install the D3D workbench.
+````
+$ git clone https://github.com/skaiser/D3D-Printer-Workbench.git
 ````
 
 Create a soft link in your home directory to make it easier to add things like icons from the file browser windows.
