@@ -169,11 +169,11 @@ class BoxFromTable:
 		if row is None:
 			print('Corner part "%s" not found'%partName)
 			return
-		corner.G = parseQuantity(row["G"])
-		corner.H = parseQuantity(row["H"])
-		corner.M = parseQuantity(row["M"])
-		corner.POD = parseQuantity(row["POD"])
-		corner.PThk = parseQuantity(row["PThk"])
+		corner.dims.G = parseQuantity(row["G"])
+		corner.dims.H = parseQuantity(row["H"])
+		corner.dims.M = parseQuantity(row["M"])
+		corner.dims.POD = parseQuantity(row["POD"])
+		corner.dims.PThk = parseQuantity(row["PThk"])
 		return corner
 
 	def create(self, pipeName, cornerName, convertToSolid = True):
@@ -183,14 +183,15 @@ class BoxFromTable:
 		frame_box.LZ = self.LZ
 		# Init corner datata
 		frame_box.corner = self.getCorner(cornerName)
-		frame_box.G = frame_box.corner.G
+		frame_box.G = frame_box.corner.dims.G
 
 		"setup pipe dimensions"
 		row = self.pipe_table.findPart(pipeName)
 		if row is None:
 			print('Pipe part "%s" not found'%pipeName)
 			return
-		frame_box.PID = parseQuantity(row["ID"])
+
+		frame_box.POD = parseQuantity(row["OD"])
 		frame_box.PThk = parseQuantity(row["Thk"])
 		return frame_box.create(convertToSolid)
 
@@ -208,7 +209,8 @@ def TestTable():
 	pipe_table.load(PipeMod.CSV_TABLE_PATH)
 	corner_table.load(CornerMod.CSV_TABLE_PATH)
 	box = BoxFromTable(document, pipe_table, corner_table)
-	pipeName = pipe_table.getPartKey(0)
+	#pipeName = pipe_table.getPartKey(0)
+	pipeName = "NPS 2\" PVC SCH 40"
 	cornerName = corner_table.getPartKey(0)
 
 	print("Using pipe %s"%pipeName)
