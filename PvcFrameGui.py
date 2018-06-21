@@ -11,7 +11,7 @@
 #*  modify it under the terms of the GNU Lesser General Public             *
 #*  License as published by the Free Software Foundation; either           *
 #*  version 2 of the License, or (at your option) any later version.       *
-#*                                                                         *            
+#*                                                                         *
 #*  This library is distributed in the hope that it will be useful,        *
 #*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
 #*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU      *
@@ -34,9 +34,12 @@ from PySide import QtCore, QtGui
 import FreeCAD
 
 import D3DBase
-from PvcFrame import *
-import pipeGui
-import outerCornerGui
+import PvcFrame
+import OsePiping.PipeGui as PipeGui
+import OsePiping.CornerGui as CornerGui
+
+parseQuantity = FreeCAD.Units.parseQuantity
+
 
 class MainDialog(QtGui.QDialog):
 	QSETTINGS_APPLICATION = "OSE D3D-Printer-Workbench"
@@ -48,9 +51,9 @@ class MainDialog(QtGui.QDialog):
 		self.cornerTable = cornerTable
 		self.initUi()
 
-	def initUi(self): 
-		Dialog = self # Added 
-		self.result = -1 
+	def initUi(self):
+		Dialog = self # Added
+		self.result = -1
 		self.setupUi(self)
 		# Restore previous user input. Ignore exceptions to prevent this part
 		# part of the code to prevent GUI from starting, once settings are broken.
@@ -182,7 +185,7 @@ class MainDialog(QtGui.QDialog):
 
 		# Update active document.  If there is none, show a warning message and do nothing.
 		# Get dimensions from the table
-		box = BoxFromTable(self.document, self.pipeTable, self.cornerTable)
+		box = PvcFrame.BoxFromTable(self.document, self.pipeTable, self.cornerTable)
 		box.LX = parseQuantity(self.lineEditLX.text())
 		if box.LX == "":
 			msgBox = QtGui.QMessageBox()
@@ -201,7 +204,7 @@ class MainDialog(QtGui.QDialog):
 			msgBox.setText("Set LZ length.")
 			msgBox.exec_()
 			return
-	
+
 		pipeName = self.lineEditPipeName.text()
 		if pipeName == "":
 			msgBox = QtGui.QMessageBox()
@@ -256,13 +259,13 @@ class MainDialog(QtGui.QDialog):
 			self.lineEditCornerName.setText(text)
 
 	def selectPipeClicked(self):
-		dlg = pipeGui.MainDialog(self.document, self.pipeTable)
+		dlg = PipeGui.MainDialog(self.document, self.pipeTable)
 		partName = dlg.showForSelection(self.lineEditPipeName.text())
 		if partName is not None:
 			self.lineEditPipeName.setText(partName)
-			
+
 	def selectCornerClicked(self):
-		dlg = outerCornerGui.MainDialog(self.document, self.cornerTable)
+		dlg = CornerGui.MainDialog(self.document, self.cornerTable)
 		partName = dlg.showForSelection(self.lineEditCornerName.text())
 		if partName is not None:
 			self.lineEditCornerName.setText(partName)

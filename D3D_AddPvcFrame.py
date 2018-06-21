@@ -10,7 +10,7 @@
 #*  modify it under the terms of the GNU Lesser General Public             *
 #*  License as published by the Free Software Foundation; either           *
 #*  version 2 of the License, or (at your option) any later version.       *
-#*                                                                         *            
+#*                                                                         *
 #*  This library is distributed in the hope that it will be useful,        *
 #*  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
 #*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU      *
@@ -28,7 +28,8 @@ import FreeCAD as App
 import FreeCADGui as Gui
 import D3DInit
 from PySide import QtGui#, QtCore # https://www.freecadweb.org/wiki/PySide
-import pipeGui, cornerGui
+import OsePiping.PipeGui as PipeGui
+import OsePiping.CornerGui as CornerGui
 import PvcFrameGui
 
 class D3D_AddPvcFrameClass():
@@ -46,8 +47,8 @@ class D3D_AddPvcFrameClass():
             App.newDocument()
 
         doc = App.activeDocument()
-	pipeTable = pipeGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
-	cornerTable = cornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
+	pipeTable = PipeGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
+	cornerTable = CornerGui.GuiCheckTable() # Open a CSV file, check its content, and return it as a CsvTable object.
 	form = PvcFrameGui.MainDialog(doc, pipeTable, cornerTable)
 	form.exec_()
         Gui.ActiveDocument.ActiveView.fitAll()
@@ -59,4 +60,4 @@ class D3D_AddPvcFrameClass():
         are met or not. This function is optional."""
         return True
 
-Gui.addCommand('D3D_AddPvcFrame', D3D_AddPvcFrameClass()) 
+Gui.addCommand('D3D_AddPvcFrame', D3D_AddPvcFrameClass())
